@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0a7a4aa5-aa98-4cf9-8850-337d5ef03d11" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1VoRNmUcnGDZwiZz6LOzYP8WccW" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0a7a4aa5-aa98-4cf9-8850-337d5ef03d11" name="Default Changelist" comment="" />
+      <created>1577917423104</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1577917423104</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="555" y="183" width="800" height="672" key="#Notifications" timestamp="1577999491719">
+      <screen x="0" y="0" width="1920" height="1045" />
+    </state>
+    <state x="555" y="183" width="800" height="672" key="#Notifications/0.0.1920.1045/1920.0.1920.1080@0.0.1920.1045" timestamp="1577999491719" />
+    <state x="768" y="208" width="374" height="621" key="#com.intellij.ide.util.MemberChooser" timestamp="1578016377303">
+      <screen x="0" y="0" width="1920" height="1045" />
+    </state>
+    <state x="768" y="208" width="374" height="621" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1045/1920.0.1920.1080@0.0.1920.1045" timestamp="1578016377303" />
+    <state width="1878" height="186" key="GridCell.Tab.0.bottom" timestamp="1578026119707">
+      <screen x="0" y="0" width="1920" height="1045" />
+    </state>
+    <state width="1878" height="186" key="GridCell.Tab.0.bottom/0.0.1920.1045/1920.0.1920.1080@0.0.1920.1045" timestamp="1578026119707" />
+    <state width="1878" height="186" key="GridCell.Tab.0.center" timestamp="1578026119707">
+      <screen x="0" y="0" width="1920" height="1045" />
+    </state>
+    <state width="1878" height="186" key="GridCell.Tab.0.center/0.0.1920.1045/1920.0.1920.1080@0.0.1920.1045" timestamp="1578026119707" />
+    <state width="1878" height="186" key="GridCell.Tab.0.left" timestamp="1578026119707">
+      <screen x="0" y="0" width="1920" height="1045" />
+    </state>
+    <state width="1878" height="186" key="GridCell.Tab.0.left/0.0.1920.1045/1920.0.1920.1080@0.0.1920.1045" timestamp="1578026119707" />
+    <state width="1878" height="186" key="GridCell.Tab.0.right" timestamp="1578026119707">
+      <screen x="0" y="0" width="1920" height="1045" />
+    </state>
+    <state width="1878" height="186" key="GridCell.Tab.0.right/0.0.1920.1045/1920.0.1920.1080@0.0.1920.1045" timestamp="1578026119707" />
+    <state x="643" y="349" key="com.intellij.ide.util.TipDialog" timestamp="1577998273886">
+      <screen x="0" y="0" width="1920" height="1045" />
+    </state>
+    <state x="643" y="349" key="com.intellij.ide.util.TipDialog/0.0.1920.1045/1920.0.1920.1080@0.0.1920.1045" timestamp="1577998273886" />
+  </component>
+</project>

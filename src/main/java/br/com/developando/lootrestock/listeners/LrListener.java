@@ -21,7 +21,7 @@ public class LrListener implements Listener {
         Player tmpPlayer = event.getPlayer();
         if (tmpBlock.getType() == Material.CHEST)   {
             Chest tmpChest = (Chest) tmpBlock.getState();
-            lrCommand.setChestReset(tmpChest);
+            //lrCommand.setChestReset(tmpChest);
         }
     }
 }

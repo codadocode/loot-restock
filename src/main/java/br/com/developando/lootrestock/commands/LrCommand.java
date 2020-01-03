@@ -1,33 +1,38 @@
 package br.com.developando.lootrestock.commands;
 
 import br.com.developando.lootrestock.LootRestock;
+import br.com.developando.lootrestock.data.ItemData;
 import br.com.developando.lootrestock.data.LootInfo;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.block.Container;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import java.util.HashMap;
-import java.util.Map;
+import org.bukkit.inventory.ItemStack;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
+import java.util.*;
 
 public class LrCommand implements CommandExecutor {
-    //private Map<Location, LootInfo> lootList;
-    private Map<String, LootInfo> lootList;
+    private Map<String, LootInfo> lootInfo;
     private LootRestock plugin;
     private Server server;
-    private YamlConfiguration lootsFile;
-    public LrCommand(Server server, LootRestock plugin, YamlConfiguration lootsFile)   {
-        //this.lootList = new HashMap<Location, LootInfo>();
-        this.lootList = new HashMap<String, LootInfo>();
+    private File lootsFile;
+    private String pluginDirPath;
+    private String lootsFileName = "loots.json";
+    public LrCommand(Server server, LootRestock plugin)   {
         this.server = server;
         this.plugin = plugin;
-        this.lootsFile = lootsFile;
+        this.pluginDirPath = plugin.getDataFolder().getAbsolutePath();
+        this.lootInfo = new HashMap<String, LootInfo>();
     }
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
@@ -40,82 +45,74 @@ public class LrCommand implements CommandExecutor {
                         if (tmpBlock.getType() == Material.CHEST)   {
                             Long resetTime = new Long(strings[1]);
                             Chest selectedChest = (Chest) tmpBlock.getState();
-                            this.saveChestStateWithTimer(selectedChest, resetTime);
-                            chestRestock(selectedChest);
-                            server.getLogger().info("[Loot Restock]: Chest has been created with cooldown reset!");
-                        }
-                    }else   { //Create Chest With No Timer
-                        if (tmpBlock.getType() == Material.CHEST)   {
-                            Chest selectedChest = (Chest) tmpBlock.getState();
-                            this.saveChestState(selectedChest);
-                            chestRestock(selectedChest);
-                            server.getLogger().info("[Loot Restock]: Chest has been created!");
+                            saveChestState(selectedChest, resetTime);
+                            printOnConsole("[Loot Restock]: Chest has been created with cooldown reset!");
                         }
                     }
-                }else if (strings[0].equals("restock"))   { //Instantly Restock a Chest
-                    Block tmpBlock = cmdPlayer.getTargetBlock(null, 5);
+                }else if (strings[0].equals("restock"))   {
+                    Block tmpBlock = cmdPlayer.getTargetBlock(null,5);
                     if (tmpBlock.getType() == Material.CHEST)   {
                         Chest selectedChest = (Chest) tmpBlock.getState();
-                        chestRestock(selectedChest);
+                        restockChest(selectedChest);
                     }
                 }
             }
         }
         return true;
     }
-    //Save Chest State
-    private void saveChestState(Chest chest)   {
-        String stringChestLocation = getBlockPositionIntoString(chest.getBlock());
-        this.lootList.put(stringChestLocation, new LootInfo(chest.getBlockInventory().getStorageContents().clone()));
-        this.lootsFile.createSection("loot-info", this.lootList);
-        this.saveLootsFile();
+    private void saveChestState(Chest chest, Long timeReset)   {
+        Location chestLocation = chest.getLocation();
+        ItemStack[] itemStacks = chest.getInventory().getContents().clone();
+        Long chestResetTime = (timeReset * 20);
+        this.lootInfo.put(getLocationInString(chestLocation), new LootInfo(Arrays.asList(itemStacks), chestResetTime));
     }
-    //Save Chest State With Timer
-    private void saveChestStateWithTimer(Chest chest, Long resetTime)   {
-        Long tmpResetTime = resetTime * 20;
-        String stringChestLocation = getBlockPositionIntoString(chest.getBlock());
-        this.lootList.put(stringChestLocation, new LootInfo(chest.getBlockInventory().getStorageContents().clone(), tmpResetTime));
-        this.lootsFile.createSection("loot-info", this.lootList);
-        this.saveLootsFile();
-    } //Restock Chest
-    private void chestRestock(Chest chest)   {
-        String stringPosArray = getBlockPositionIntoString(chest.getBlock());
-        if (this.lootList.containsKey(stringPosArray))   {
-            LootInfo tmpLootInfo = this.lootList.get(stringPosArray);
-            chest.getBlockInventory().setStorageContents(tmpLootInfo.getItemStacks());
-            tmpLootInfo.turnOffCooldown();
-            server.getLogger().info("[Loot Restock]: Chest has been restocked!");
-        }
-    } //Start Chest Timer Cooldown
-    public void setChestReset(final Chest chest)   {
-        if (this.lootList.containsKey(chest.getLocation()))   {
-            Chest tmpChest = chest;
-            LootInfo lootInfo = this.lootList.get(chest.getLocation());
-            if (!lootInfo.isOnCooldown())   {
-                if (lootInfo.getResetTime() > 0)   {
-                    server.getLogger().info("Passou isOnCooldown!");
-                    server.getScheduler().runTaskLater(this.plugin, new Runnable() {
-                        @Override
-                        public void run() {
-                            chestRestock(chest);
-                        }
-                    }, lootInfo.getResetTime());
-                }
-                lootInfo.turnOnCooldown();
-            }
+    private void restockChest(Chest chest)   {
+        String chestLocationString = getLocationInString(chest.getLocation());
+        if (this.lootInfo.containsKey(chestLocationString))   {
+            printOnConsole("This chest exists in lootinfo.");
+            chest.getInventory().setContents(this.lootInfo.get(chestLocationString).getItemStack());
+            printOnConsole("The chest has been restocked!");
         }
     }
-    private String getBlockPositionIntoString(Block block)   {
-        Integer[] intArray = new Integer[] {block.getState().getLocation().getBlockX(), block.getState().getLocation().getBlockY(), block.getState().getLocation().getBlockZ()};
-        String stringPos = new String(intArray[0].toString() + "/" + intArray[1].toString() + "/" + intArray[2].toString());
-        return stringPos;
+    private String getLocationInString(Location location)   {
+        Integer posX = new Integer(location.getBlockX());
+        Integer posY = new Integer(location.getBlockY());
+        Integer posZ = new Integer(location.getBlockZ());
+        return new String(posX.toString() + "/" + posY.toString() + "/" + posZ.toString());
     }
-    private void saveLootsFile()   {
+    private void printOnConsole(String msg)   {
+        plugin.getLogger().info(msg);
+    }
+    public void test(Chest chest)   {
         try   {
-            this.lootsFile.save(plugin.getDataFolder().getAbsolutePath() + "/" + "loots.yml");
-            server.getLogger().info("Loots File Has Been Saved!");
-        }catch (Exception e)   {
+            File pluginDir = new File(this.pluginDirPath);
+            if (!pluginDir.exists())   {
+                pluginDir.mkdir();
+            }
+            File lootsFile = new File(pluginDir.getAbsolutePath() + "/" + "loots.json");
+            if (!lootsFile.exists())   {
+                lootsFile.createNewFile();
+            }
+            Writer writer = new FileWriter(lootsFile);
+            List<ItemData> itemDataList = new ArrayList<ItemData>();
 
+            ItemStack[] itemStacks = chest.getInventory().getContents();
+            List<ItemStack> listItemStack = Arrays.asList(itemStacks);
+            for (int i = 0; i < listItemStack.size(); i++)   {
+                if (listItemStack.get(i) != null)   {
+                    itemDataList.add(new ItemData(listItemStack.get(i)));
+                }
+            }
+            System.out.println(itemDataList.toString());
+            LootInfo info = new LootInfo(listItemStack, 200L);
+            Map<String, LootInfo> lootInfo = new HashMap<String, LootInfo>();
+            lootInfo.put("-7/140/-20", info);
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+            gson.toJson(lootInfo, writer);
+            writer.close();
+        }catch (Exception e)   {
+            e.printStackTrace();
         }
     }
 }

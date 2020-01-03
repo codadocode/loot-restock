@@ -1,6 +1,7 @@
+br/com/developando/lootrestock/data/MetaData.class
 br/com/developando/lootrestock/commands/LrCommand.class
 br/com/developando/lootrestock/data/LootData.class
 br/com/developando/lootrestock/listeners/LrListener.class
-br/com/developando/lootrestock/commands/LrCommand$1.class
+br/com/developando/lootrestock/data/ItemData.class
 br/com/developando/lootrestock/LootRestock.class
 br/com/developando/lootrestock/data/LootInfo.class
